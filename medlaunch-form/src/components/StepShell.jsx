@@ -15,8 +15,8 @@ function StepShell({
         <div className="top-header__brand">DNV Healthcare</div>
 
         <div className="top-header__user">
-          <div className="user-avatar">KM</div>
-          <span className="user-name">Katherine Martinez</span>
+          <div className="user-avatar">YD</div>
+          <span className="user-name">Yashaswini Diggavi</span>
         </div>
       </header>
 
