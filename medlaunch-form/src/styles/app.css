@@ -1,0 +1,220 @@
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background: #f3f3f3;
+  color: #333;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.step-page {
+  min-height: 100vh;
+  background: #f3f3f3;
+}
+
+.top-bar {
+  height: 72px;
+  background: #003b78;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 28px;
+  font-weight: 600;
+}
+
+.top-bar-left {
+  font-size: 15px;
+}
+
+.top-bar-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+}
+
+.user-badge {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: white;
+  color: #003b78;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 12px;
+}
+
+.step-container {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 34px 20px 60px;
+}
+
+.step-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.step-title {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 700;
+  color: #4a4a4a;
+}
+
+.step-count {
+  font-size: 12px;
+  color: #666;
+}
+
+.progress-bars {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.progress-segment {
+  height: 4px;
+  background: #d3d3d3;
+  border-radius: 10px;
+}
+
+.progress-segment.active {
+  background: #005baa;
+}
+
+.progress-row {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 8px;
+  font-size: 10px;
+  color: #666;
+  margin-bottom: 30px;
+}
+
+.progress-item.active {
+  color: #005baa;
+  font-weight: 600;
+}
+
+.form-card {
+  width: 100%;
+  max-width: 540px;
+  margin: 0 auto;
+  background: white;
+  border-radius: 8px;
+  padding: 28px 28px 34px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+.section-title {
+  margin: 0 0 18px;
+  font-size: 16px;
+  color: #4a4a4a;
+}
+
+.section-space {
+  margin-top: 34px;
+}
+
+.section-subtext {
+  margin-top: -8px;
+  margin-bottom: 18px;
+  font-size: 11px;
+  color: #8a8a8a;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 16px;
+}
+
+.form-group label {
+  font-size: 12px;
+  margin-bottom: 6px;
+  color: #4a4a4a;
+  font-weight: 500;
+}
+
+.form-group input {
+  height: 40px;
+  border: 1px solid #d4d4d4;
+  border-radius: 4px;
+  padding: 0 12px;
+  font-size: 14px;
+  background: white;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.checkbox-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  margin-bottom: 8px;
+  color: #4a4a4a;
+}
+
+.verification-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 8px;
+}
+
+.outline-btn {
+  height: 32px;
+  padding: 0 14px;
+  border: 1px solid #005baa;
+  background: white;
+  color: #005baa;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.primary-btn {
+  height: 36px;
+  padding: 0 18px;
+  border: none;
+  background: #005baa;
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.status-pill {
+  background: #f3d76c;
+  color: #6e5800;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 10px;
+}
+
+.bottom-actions {
+  max-width: 540px;
+  margin: 28px auto 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.right-actions {
+  display: flex;
+  gap: 12px;
+}
