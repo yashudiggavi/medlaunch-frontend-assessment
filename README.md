@@ -1,112 +1,159 @@
 # MedLaunch Frontend Developer Assessment
 
 ## Overview
-This project implements a multi-step hospital application form using React.  
-The form collects hospital information across multiple steps and allows users to review all entered data before submitting the application.
 
-When the user submits the form, the complete application payload is logged to the browser console as required in the assessment instructions.
+This project implements a multi-step hospital application form using React.
+
+The application collects hospital information across multiple steps and allows users to review all entered data before submitting the application.
+
+Once the form is submitted, the complete application payload is logged to the browser console as required in the assessment instructions.
 
 ---
 
 ## Tech Stack
 
-- React (JavaScript)
-- Vite
-- Pure CSS
+The following technologies were used to build the project:
+
+React (JavaScript) – UI development  
+Vite – Development build tool  
+Pure CSS – Styling  
 
 No external UI libraries or CSS frameworks were used.
 
 ---
 
-## Features
+## How to Install and Run the App Locally
 
-- Multi-step form navigation (Next / Previous)
-- State management across all steps
-- Review page displaying all entered information
-- Confirmation checkbox before submission
-- Payload logging to browser console on submit
-- Export application data to CSV
-- Download review page as PDF using browser print
+1. Clone the repository
 
----
+git clone https://github.com/yashudiggavi/medlaunch-frontend-assessment.git
 
-## Project Structure
-
-src  
- ├─ components  
- │   ├─ StepShell.jsx  
- │   └─ SectionCard.jsx  
-
- ├─ steps  
- │   ├─ Step1QuoteRequest.jsx  
- │   ├─ Step2FacilityDetails.jsx  
- │   ├─ Step3LeadershipContacts.jsx  
- │   ├─ Step4SiteInformation.jsx  
- │   ├─ Step5ServicesCertifications.jsx  
- │   └─ Step6ReviewSubmit.jsx  
-
- └─ App.jsx  
-
----
-
-## Installation & Setup
-
-Clone the repository
-
-git clone <repository-url>
-
-Navigate to project folder
+2. Navigate to the repository folder
 
 cd medlaunch-frontend-assessment
 
-Install dependencies
+3. Navigate to the React application folder
+
+cd medlaunch-form
+
+4. Install dependencies
 
 npm install
 
-Run the development server
+5. Start the development server
 
 npm run dev
 
-Open in browser
+6. Open the application
+
+Open your browser and go to:
 
 http://localhost:5173
 
 ---
 
+## Development Approach
+
+The application was implemented as a multi-step form workflow where each step is built as a separate React component.
+
+Each step collects a specific category of information such as:
+
+- Hospital basic information
+- Facility details
+- Leadership contacts
+- Site information
+- Services and certifications
+
+The form state is managed centrally and passed between components using props to ensure that data persists across steps.
+
+Reusable layout components such as StepShell and SectionCard were created to maintain consistent UI structure across all steps.
+
+A Review & Submit page allows users to verify all entered data before submitting the form.
+
+When the user clicks the Submit Application button, the full form payload is logged to the browser console.
+
+---
+
+## Project Structure
+
+medlaunch-frontend-assessment
+
+medlaunch-form  
+│  
+├── src  
+│   ├── components  
+│   │   ├── StepShell.jsx  
+│   │   └── SectionCard.jsx  
+│   │  
+│   ├── steps  
+│   │   ├── Step1QuoteRequest.jsx  
+│   │   ├── Step2FacilityDetails.jsx  
+│   │   ├── Step3LeadershipContacts.jsx  
+│   │   ├── Step4SiteInformation.jsx  
+│   │   ├── Step5ServicesCertifications.jsx  
+│   │   └── Step6ReviewSubmit.jsx  
+│   │  
+│   └── App.jsx  
+│  
+├── package.json  
+├── vite.config.js  
+
+README.md  
+QA_Test_Report.md  
+
+---
+
 ## Form Submission
 
-When the **Submit Application** button is clicked:
+When the Submit Application button is clicked:
 
-- The application checks if the confirmation checkbox is selected
-- If confirmed, the full form payload is logged to the browser console
+1. The application checks if the confirmation checkbox is selected.
+2. If confirmed, the complete form payload is logged to the browser console.
 
-Example:
+Example console output:
 
 Final Form Payload: { ...formData }
+
+To view this:
+
+1. Open browser developer tools  
+2. Go to the Console tab  
+3. Click Submit Application  
 
 ---
 
 ## Assumptions
 
-- Backend integration was not required for this assignment
-- Email verification is simulated
-- File uploads are simulated by displaying file names
+Backend integration was not required for this assignment.
+
+Email verification is simulated for demonstration purposes.
+
+File uploads are simulated by displaying file names rather than uploading files to a server.
+
+CSV export contains key form data fields.
 
 ---
 
-## Known Limitations
+## Known Issues / Limitations
 
-- No backend API integration
-- PDF export uses browser print functionality
-- CSV export includes key fields only
-- Limited form validation
+There is no backend API integration.
+
+PDF download uses browser print functionality.
+
+Form validation is limited to basic checks.
+
+Minor React warnings may appear for duplicate keys during list rendering.
 
 ---
 
 ## Future Improvements
 
-- API integration for form submission
-- Real email verification flow
-- Additional form validations
-- Improved responsive design
-- Unit tests for form components
+Integrate backend API for real form submission.
+
+Implement real email verification functionality.
+
+Add stronger input validation and error handling.
+
+Improve responsive design for smaller screens.
+
+Add automated testing for form components.

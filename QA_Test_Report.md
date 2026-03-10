@@ -4,29 +4,52 @@
 MedLaunch Frontend Developer Assessment
 
 ## Objective
-Verify that the multi-step form functions correctly and satisfies the requirements described in the assessment document.
+The objective of this QA testing process was to verify that the multi-step hospital application form works correctly and meets the requirements specified in the assessment document.
+
+The testing focused on validating form navigation, data persistence, review page accuracy, submission functionality, and export features.
 
 ---
 
 ## Test Environment
 
-Browser: Google Chrome  
 Operating System: Windows 11  
-Framework: React (Vite)
+Browser: Google Chrome (latest version)  
+Framework: React with Vite  
+
+Testing was performed locally using the development server.
 
 ---
 
-## Test Scenarios
+## Tools Used
 
-### 1. Step Navigation
+The following tools were used during testing:
+
+Google Chrome Developer Tools – Used to inspect console output and verify that the final payload was logged correctly.  
+Manual Testing – Used to verify form functionality and navigation across steps.  
+
+No automated testing tools were used for this assignment.
+
+---
+
+## Test Scenarios Executed
+
+### 1. Multi-Step Navigation
 
 Test Case  
-Navigate between steps using Next and Previous buttons.
+Verify that the user can navigate through the form using Next and Previous buttons.
+
+Steps  
+1. Open the application.  
+2. Click Next to move to the next step.  
+3. Click Previous to return to the previous step.
 
 Expected Result  
-User should be able to move between steps without losing data.
+The user should be able to move between steps without errors.
 
-Result  
+Actual Result  
+Navigation worked correctly across all steps.
+
+Status  
 PASS
 
 ---
@@ -34,107 +57,145 @@ PASS
 ### 2. Form Data Persistence
 
 Test Case  
-Enter values in earlier steps, move forward and return back.
+Verify that entered data remains when navigating between steps.
+
+Steps  
+1. Enter values in Step 1.  
+2. Move to Step 2 and Step 3.  
+3. Return to Step 1.
 
 Expected Result  
-Previously entered values should remain populated.
+Previously entered values should remain in the form fields.
 
-Result  
+Actual Result  
+All entered values remained intact.
+
+Status  
 PASS
 
 ---
 
-### 3. Review Page Display
+### 3. Review Page Validation
 
 Test Case  
-Navigate to Step 6 review page.
+Verify that all user-entered information appears correctly on the Review & Submit page.
+
+Steps  
+1. Complete all form steps.  
+2. Navigate to the Review page (Step 6).
 
 Expected Result  
-All previously entered information should be displayed correctly.
+All information from previous steps should be displayed correctly.
 
-Result  
+Actual Result  
+All fields were displayed accurately.
+
+Status  
 PASS
 
 ---
 
-### 4. Email Verification Indicator
+### 4. Confirmation Checkbox Validation
 
 Test Case  
-Enter email and verify the indicator.
+Verify that the form cannot be submitted unless the confirmation checkbox is selected.
+
+Steps  
+1. Navigate to Step 6.  
+2. Attempt to submit the form without selecting the confirmation checkbox.
 
 Expected Result  
-Verified label appears next to the email address.
+Submission should be blocked.
 
-Result  
+Actual Result  
+Submission was prevented until the checkbox was selected.
+
+Status  
 PASS
 
 ---
 
-### 5. Submit Confirmation Validation
+### 5. Form Submission
 
 Test Case  
-Attempt to submit without selecting confirmation checkbox.
+Verify that the application logs the final payload when the user submits the form.
+
+Steps  
+1. Fill all form steps.  
+2. Select the confirmation checkbox.  
+3. Click Submit Application.
 
 Expected Result  
-Submission should be blocked and a message should appear.
+The final payload should appear in the browser console.
 
-Result  
+Actual Result  
+The payload was successfully logged to the console.
+
+Status  
 PASS
 
 ---
 
-### 6. Form Submission
+### 6. CSV Export
 
 Test Case  
-Submit the form after selecting confirmation checkbox.
+Verify that the CSV export button downloads the application data.
+
+Steps  
+1. Navigate to Step 6.  
+2. Click Export to CSV.
 
 Expected Result  
-Application payload should be logged to the browser console.
+A CSV file should download containing form data.
 
-Result  
+Actual Result  
+CSV file downloaded successfully.
+
+Status  
 PASS
 
 ---
 
-### 7. CSV Export
+### 7. PDF Download
 
 Test Case  
-Click Export to CSV.
+Verify that the Download as PDF button works.
+
+Steps  
+1. Navigate to Step 6.  
+2. Click Download as PDF.
 
 Expected Result  
-CSV file downloads containing form data.
+Browser print dialog should open allowing the page to be saved as PDF.
 
-Result  
-PASS
+Actual Result  
+Browser print dialog opened successfully.
 
----
-
-### 8. PDF Download
-
-Test Case  
-Click Download as PDF.
-
-Expected Result  
-Browser print dialog opens to save the page as PDF.
-
-Result  
+Status  
 PASS
 
 ---
 
 ## Bugs Identified
 
-Minor React warning about duplicate keys during list rendering.
+### Duplicate Key Warning in Console
+
+Issue  
+A React warning appeared in the console indicating that two elements had the same key when rendering a list.
 
 Impact  
-Low – does not affect functionality.
+Low – This warning did not affect the functionality of the application.
+
+Resolution  
+Keys were updated to ensure uniqueness when rendering mapped lists.
 
 Status  
-Pending cleanup in future updates.
+Resolved
 
 ---
 
 ## Conclusion
 
-All core functionality described in the assessment requirements has been implemented and tested successfully.  
-The multi-step form works correctly and the submission payload is logged to the browser console as expected.
+All required features described in the assessment were implemented and tested successfully.
+
+The multi-step form functions correctly, data persists across steps, and the final form payload is logged to the console upon submission as required.
