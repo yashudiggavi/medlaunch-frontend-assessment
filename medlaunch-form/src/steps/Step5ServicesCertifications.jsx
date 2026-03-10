@@ -17,13 +17,6 @@ const serviceCategories = {
     "Diagnostic Radioisotope Facility",
     "Lithotripsy",
   ],
-  "Rehabilitation Services": [
-    "Physical Rehabilitation Services",
-    "Physical Therapy",
-    "Occupational Therapy",
-    "Speech/Language Therapy",
-    "Audiology",
-  ],
 };
 
 const standardOptions = [
