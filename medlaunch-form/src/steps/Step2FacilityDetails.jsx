@@ -10,7 +10,13 @@ const facilityOptions = [
   "Other",
 ];
 
-function Step2FacilityDetails({ formData, setFieldValue, nextStep, prevStep }) {
+function Step2FacilityDetails({
+  formData,
+  setFieldValue,
+  nextStep,
+  prevStep,
+  errors,
+}) {
   return (
     <StepShell
       title="Facility Details"
@@ -53,10 +59,31 @@ function Step2FacilityDetails({ formData, setFieldValue, nextStep, prevStep }) {
               </label>
             ))}
           </div>
+
+          {errors?.facilityType && (
+            <p className="error">{errors.facilityType}</p>
+          )}
         </div>
+
+        {formData.facilityType === "Other" && (
+          <div className="form-group">
+            <label className="form-label">
+              Please specify <span className="required">*</span>
+            </label>
+            <input
+              className="text-input"
+              type="text"
+              name="facilityOther"
+              value={formData.facilityOther}
+              onChange={(e) => setFieldValue("facilityOther", e.target.value)}
+            />
+            {errors?.facilityOther && (
+              <p className="error">{errors.facilityOther}</p>
+            )}
+          </div>
+        )}
       </SectionCard>
     </StepShell>
   );
 }
-
 export default Step2FacilityDetails;

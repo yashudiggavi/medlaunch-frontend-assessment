@@ -1,6 +1,7 @@
 import { useState } from "react";
 import "./App.css";
 import initialFormData from "./data/initialFormData";
+import { validateStep } from "./utils/validation";
 
 import Step1QuoteRequest from "./steps/Step1QuoteRequest";
 import Step2FacilityDetails from "./steps/Step2FacilityDetails";
@@ -12,24 +13,62 @@ import Step6ReviewSubmit from "./steps/Step6ReviewSubmit";
 function App() {
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState(initialFormData);
-
-  const nextStep = () => setStep((prev) => Math.min(prev + 1, 6));
-  const prevStep = () => setStep((prev) => Math.max(prev - 1, 1));
+  const [errors, setErrors] = useState({});
 
   const setFieldValue = (field, value) => {
     setFormData((prev) => ({
       ...prev,
       [field]: value,
     }));
+
+    setErrors((prev) => ({
+      ...prev,
+      [field]: "",
+    }));
   };
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
 
+    let updatedValue = type === "checkbox" ? checked : value;
+
+    if (
+      name === "primaryWorkPhone" ||
+      name === "primaryCellPhone" ||
+      name === "ceoPhone" ||
+      name === "qualityPhone" ||
+      name === "invoicingPhone" ||
+      name === "billingZip"
+    ) {
+      updatedValue = value.replace(/\D/g, "").slice(0, 10);
+    }
+
     setFormData((prev) => ({
       ...prev,
-      [name]: type === "checkbox" ? checked : value,
+      [name]: updatedValue,
     }));
+
+    setErrors((prev) => ({
+      ...prev,
+      [name]: "",
+    }));
+  };
+
+  const nextStep = () => {
+    const stepErrors = validateStep(step, formData);
+
+    if (Object.keys(stepErrors).length > 0) {
+      setErrors(stepErrors);
+      return;
+    }
+
+    setErrors({});
+    setStep((prev) => Math.min(prev + 1, 6));
+  };
+
+  const prevStep = () => {
+    setErrors({});
+    setStep((prev) => Math.max(prev - 1, 1));
   };
 
   return (
@@ -38,8 +77,9 @@ function App() {
         <Step1QuoteRequest
           formData={formData}
           handleChange={handleChange}
-          setFieldValue={setFieldValue}
           nextStep={nextStep}
+          errors={errors}
+          setFieldValue={setFieldValue}
         />
       )}
 
@@ -49,6 +89,7 @@ function App() {
           setFieldValue={setFieldValue}
           nextStep={nextStep}
           prevStep={prevStep}
+          errors={errors}
         />
       )}
 
@@ -59,6 +100,7 @@ function App() {
           setFieldValue={setFieldValue}
           nextStep={nextStep}
           prevStep={prevStep}
+          errors={errors}
         />
       )}
 
@@ -68,6 +110,7 @@ function App() {
           setFieldValue={setFieldValue}
           nextStep={nextStep}
           prevStep={prevStep}
+          errors={errors}
         />
       )}
 
@@ -77,6 +120,7 @@ function App() {
           setFieldValue={setFieldValue}
           nextStep={nextStep}
           prevStep={prevStep}
+          errors={errors}
         />
       )}
 
@@ -90,5 +134,4 @@ function App() {
     </>
   );
 }
-
 export default App;

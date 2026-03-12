@@ -11,6 +11,7 @@ function ContactBlock({
   formData,
   handleChange,
   setFieldValue,
+  errors,
   required = false,
 }) {
   const copyPrimary = (checked) => {
@@ -49,6 +50,9 @@ function ContactBlock({
             value={formData[firstNameField]}
             onChange={handleChange}
           />
+          {errors?.[firstNameField] && (
+            <p className="error">{errors[firstNameField]}</p>
+          )}
         </div>
 
         <div className="form-group">
@@ -62,6 +66,9 @@ function ContactBlock({
             value={formData[lastNameField]}
             onChange={handleChange}
           />
+          {errors?.[lastNameField] && (
+            <p className="error">{errors[lastNameField]}</p>
+          )}
         </div>
       </div>
 
@@ -75,7 +82,11 @@ function ContactBlock({
           name={phoneField}
           value={formData[phoneField]}
           onChange={handleChange}
+          maxLength={10}
         />
+        {errors?.[phoneField] && (
+          <p className="error">{errors[phoneField]}</p>
+        )}
       </div>
 
       <div className="form-group">
@@ -89,6 +100,9 @@ function ContactBlock({
           value={formData[emailField]}
           onChange={handleChange}
         />
+        {errors?.[emailField] && (
+          <p className="error">{errors[emailField]}</p>
+        )}
       </div>
     </div>
   );
@@ -100,6 +114,7 @@ function Step3LeadershipContacts({
   setFieldValue,
   nextStep,
   prevStep,
+  errors,
 }) {
   return (
     <StepShell
@@ -135,6 +150,7 @@ function Step3LeadershipContacts({
           formData={formData}
           handleChange={handleChange}
           setFieldValue={setFieldValue}
+          errors={errors}
           required
         />
 
@@ -148,6 +164,7 @@ function Step3LeadershipContacts({
           formData={formData}
           handleChange={handleChange}
           setFieldValue={setFieldValue}
+          errors={errors}
         />
 
         <ContactBlock
@@ -160,6 +177,7 @@ function Step3LeadershipContacts({
           formData={formData}
           handleChange={handleChange}
           setFieldValue={setFieldValue}
+          errors={errors}
           required
         />
 
@@ -177,6 +195,9 @@ function Step3LeadershipContacts({
               value={formData.billingStreet}
               onChange={handleChange}
             />
+            {errors?.billingStreet && (
+              <p className="error">{errors.billingStreet}</p>
+            )}
           </div>
 
           <div className="three-col">
@@ -191,6 +212,9 @@ function Step3LeadershipContacts({
                 value={formData.billingCity}
                 onChange={handleChange}
               />
+              {errors?.billingCity && (
+                <p className="error">{errors.billingCity}</p>
+              )}
             </div>
 
             <div className="form-group">
@@ -209,6 +233,9 @@ function Step3LeadershipContacts({
                 <option value="TX">Texas</option>
                 <option value="IL">Illinois</option>
               </select>
+              {errors?.billingState && (
+                <p className="error">{errors.billingState}</p>
+              )}
             </div>
 
             <div className="form-group">
@@ -222,6 +249,9 @@ function Step3LeadershipContacts({
                 value={formData.billingZip}
                 onChange={handleChange}
               />
+              {errors?.billingZip && (
+                <p className="error">{errors.billingZip}</p>
+              )}
             </div>
           </div>
         </div>
@@ -229,5 +259,4 @@ function Step3LeadershipContacts({
     </StepShell>
   );
 }
-
 export default Step3LeadershipContacts;

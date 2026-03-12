@@ -32,6 +32,7 @@ function Step5ServicesCertifications({
   setFieldValue,
   nextStep,
   prevStep,
+  errors,
 }) {
   const toggleService = (service) => {
     const exists = formData.services.includes(service);
@@ -131,8 +132,8 @@ function Step5ServicesCertifications({
             <div key={category} className="service-card">
               <div className="service-card-title">{category}</div>
 
-              {services.map((service) => (
-                <label key={service} className="service-check">
+              {services.map((service, index) => (
+                <label key={`${service}-${index}`} className="service-check">
                   <input
                     type="checkbox"
                     checked={formData.services.includes(service)}
@@ -144,6 +145,8 @@ function Step5ServicesCertifications({
             </div>
           ))}
         </div>
+
+        {errors?.services && <p className="error">{errors.services}</p>}
 
         <div style={{ marginTop: "14px" }}>
           <button type="button" className="btn-outline" onClick={addOtherService}>
@@ -233,7 +236,9 @@ function Step5ServicesCertifications({
 
           <div className="two-col section-divider-space">
             <div className="form-group">
-              <label className="form-label">Expiration Date of Current Stroke Certification</label>
+              <label className="form-label">
+                Expiration Date of Current Stroke Certification
+              </label>
               <input
                 className="text-input"
                 type="date"
@@ -289,7 +294,9 @@ function Step5ServicesCertifications({
 
           <div className="section-divider-space">
             <div className="form-group">
-              <label className="form-label">Dates of last fifteen thrombectomies</label>
+              <label className="form-label">
+                Dates of last fifteen thrombectomies
+              </label>
               <input
                 className="text-input"
                 type="date"
@@ -323,5 +330,4 @@ function Step5ServicesCertifications({
     </StepShell>
   );
 }
-
 export default Step5ServicesCertifications;

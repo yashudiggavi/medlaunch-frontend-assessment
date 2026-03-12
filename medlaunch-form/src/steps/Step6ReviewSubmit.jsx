@@ -59,7 +59,12 @@ function Step6ReviewSubmit({ formData, setFieldValue, prevStep }) {
         "Primary Email Verified",
         formData.primaryEmailVerified ? "Yes" : "No",
       ],
-      ["Facility Type", displayValue(formData.facilityType)],
+      [
+        "Facility Type",
+        formData.facilityType === "Other"
+          ? `Other - ${displayValue(formData.facilityOther)}`
+          : displayValue(formData.facilityType),
+      ],
       [
         "CEO Name",
         `${displayValue(formData.ceoFirstName)} ${displayValue(
@@ -236,7 +241,11 @@ function Step6ReviewSubmit({ formData, setFieldValue, prevStep }) {
             <tbody>
               <tr>
                 <td>Facility Type</td>
-                <td>{displayValue(formData.facilityType)}</td>
+                <td>
+                  {formData.facilityType === "Other"
+                    ? `Other - ${displayValue(formData.facilityOther)}`
+                    : displayValue(formData.facilityType)}
+                </td>
               </tr>
             </tbody>
           </table>
@@ -344,7 +353,7 @@ function Step6ReviewSubmit({ formData, setFieldValue, prevStep }) {
                 <td>Services Provided</td>
                 <td>
                   <div className="review-tag-list">
-                    {formData.services.length > 0 ? (
+                    {formData.services?.length > 0 ? (
                       formData.services.map((item, index) => (
                         <span key={`${item}-${index}`} className="review-tag">
                           {item}
@@ -357,7 +366,8 @@ function Step6ReviewSubmit({ formData, setFieldValue, prevStep }) {
                 </td>
               </tr>
 
-              {formData.otherServices.length > 0 && (
+              {formData.otherServices?.filter((item) => String(item).trim() !== "")
+                .length > 0 && (
                 <tr>
                   <td>Other Services</td>
                   <td>
@@ -378,7 +388,7 @@ function Step6ReviewSubmit({ formData, setFieldValue, prevStep }) {
                 <td>Standards to Apply</td>
                 <td>
                   <div className="review-tag-list">
-                    {formData.standards.length > 0 ? (
+                    {formData.standards?.length > 0 ? (
                       formData.standards.map((item, index) => (
                         <span key={`${item}-${index}`} className="review-tag">
                           {item}
@@ -462,5 +472,4 @@ function Step6ReviewSubmit({ formData, setFieldValue, prevStep }) {
     </StepShell>
   );
 }
-
 export default Step6ReviewSubmit;

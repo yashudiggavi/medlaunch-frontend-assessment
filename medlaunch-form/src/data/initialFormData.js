@@ -12,6 +12,7 @@ const initialFormData = {
   primaryEmailVerified: false,
 
   facilityType: "",
+  facilityOther: "",
 
   ceoSameAsPrimary: false,
   ceoFirstName: "",
@@ -36,9 +37,9 @@ const initialFormData = {
   billingState: "",
   billingZip: "",
 
-  siteMode: "single",
-  siteInputMethod: "upload",
-  uploadedFiles: ["File.csv", "File.csv"],
+  siteMode: "",
+  siteInputMethod: "",
+  uploadedFiles: [],
 
   services: [],
   otherServices: [],
@@ -51,5 +52,4 @@ const initialFormData = {
 
   submitConfirmed: false,
 };
-
 export default initialFormData;

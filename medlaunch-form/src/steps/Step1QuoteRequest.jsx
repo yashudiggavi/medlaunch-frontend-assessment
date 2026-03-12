@@ -1,7 +1,13 @@
 import StepShell from "../components/StepShell";
 import SectionCard from "../components/SectionCard";
 
-function Step1QuoteRequest({ formData, handleChange, setFieldValue, nextStep }) {
+function Step1QuoteRequest({
+  formData,
+  handleChange,
+  nextStep,
+  errors,
+  setFieldValue,
+}) {
   const handleSameAsLegalEntity = (e) => {
     const checked = e.target.checked;
     handleChange(e);
@@ -58,6 +64,9 @@ function Step1QuoteRequest({ formData, handleChange, setFieldValue, nextStep }) 
             value={formData.legalEntityName}
             onChange={handleChange}
           />
+          {errors.legalEntityName && (
+            <p className="error">{errors.legalEntityName}</p>
+          )}
         </div>
 
         <div className="form-group">
@@ -71,6 +80,7 @@ function Step1QuoteRequest({ formData, handleChange, setFieldValue, nextStep }) 
             value={formData.dbaName}
             onChange={handleChange}
           />
+          {errors.dbaName && <p className="error">{errors.dbaName}</p>}
         </div>
 
         <label className="checkbox-row">
@@ -101,6 +111,9 @@ function Step1QuoteRequest({ formData, handleChange, setFieldValue, nextStep }) 
                 value={formData.primaryFirstName}
                 onChange={handleChange}
               />
+              {errors.primaryFirstName && (
+                <p className="error">{errors.primaryFirstName}</p>
+              )}
             </div>
 
             <div className="form-group">
@@ -114,6 +127,9 @@ function Step1QuoteRequest({ formData, handleChange, setFieldValue, nextStep }) 
                 value={formData.primaryLastName}
                 onChange={handleChange}
               />
+              {errors.primaryLastName && (
+                <p className="error">{errors.primaryLastName}</p>
+              )}
             </div>
           </div>
 
@@ -128,6 +144,9 @@ function Step1QuoteRequest({ formData, handleChange, setFieldValue, nextStep }) 
               value={formData.primaryTitle}
               onChange={handleChange}
             />
+            {errors.primaryTitle && (
+              <p className="error">{errors.primaryTitle}</p>
+            )}
           </div>
 
           <div className="two-col">
@@ -141,7 +160,11 @@ function Step1QuoteRequest({ formData, handleChange, setFieldValue, nextStep }) 
                 name="primaryWorkPhone"
                 value={formData.primaryWorkPhone}
                 onChange={handleChange}
+                maxLength={10}
               />
+              {errors.primaryWorkPhone && (
+                <p className="error">{errors.primaryWorkPhone}</p>
+              )}
             </div>
 
             <div className="form-group">
@@ -152,6 +175,7 @@ function Step1QuoteRequest({ formData, handleChange, setFieldValue, nextStep }) 
                 name="primaryCellPhone"
                 value={formData.primaryCellPhone}
                 onChange={handleChange}
+                maxLength={10}
               />
             </div>
           </div>
@@ -167,6 +191,9 @@ function Step1QuoteRequest({ formData, handleChange, setFieldValue, nextStep }) 
               value={formData.primaryEmail}
               onChange={handleChange}
             />
+            {errors.primaryEmail && (
+              <p className="error">{errors.primaryEmail}</p>
+            )}
           </div>
 
           <div className="verify-row">
@@ -197,5 +224,4 @@ function Step1QuoteRequest({ formData, handleChange, setFieldValue, nextStep }) 
     </StepShell>
   );
 }
-
 export default Step1QuoteRequest;
