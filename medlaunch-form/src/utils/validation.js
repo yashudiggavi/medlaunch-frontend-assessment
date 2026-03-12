@@ -1,6 +1,6 @@
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const phoneRegex = /^[0-9]{10}$/;
-const zipRegex = /^[0-9]{5,10}$/;
+const zipRegex = /^[0-9]{5}$/;
 
 export const validateStep = (step, formData) => {
   const errors = {};

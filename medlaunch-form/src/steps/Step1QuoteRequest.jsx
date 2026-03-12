@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import StepShell from "../components/StepShell";
 import SectionCard from "../components/SectionCard";
 
@@ -8,9 +9,15 @@ function Step1QuoteRequest({
   errors,
   setFieldValue,
 }) {
+  useEffect(() => {
+    if (formData.sameAsLegalEntity) {
+      setFieldValue("dbaName", formData.legalEntityName);
+    }
+  }, [formData.legalEntityName, formData.sameAsLegalEntity, setFieldValue]);
+
   const handleSameAsLegalEntity = (e) => {
     const checked = e.target.checked;
-    handleChange(e);
+    setFieldValue("sameAsLegalEntity", checked);
 
     if (checked) {
       setFieldValue("dbaName", formData.legalEntityName);
@@ -26,7 +33,7 @@ function Step1QuoteRequest({
     }
 
     setFieldValue("primaryEmailVerified", true);
-    alert(`Verification email sent to ${formData.primaryEmail}`);
+    alert(`Verification simulated for ${formData.primaryEmail}`);
   };
 
   return (
@@ -79,6 +86,7 @@ function Step1QuoteRequest({
             name="dbaName"
             value={formData.dbaName}
             onChange={handleChange}
+            disabled={formData.sameAsLegalEntity}
           />
           {errors.dbaName && <p className="error">{errors.dbaName}</p>}
         </div>

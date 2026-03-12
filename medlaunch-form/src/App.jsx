@@ -28,31 +28,34 @@ function App() {
   };
 
   const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
+  const { name, value, type, checked } = e.target;
 
-    let updatedValue = type === "checkbox" ? checked : value;
+  let updatedValue = type === "checkbox" ? checked : value;
 
-    if (
-      name === "primaryWorkPhone" ||
-      name === "primaryCellPhone" ||
-      name === "ceoPhone" ||
-      name === "qualityPhone" ||
-      name === "invoicingPhone" ||
-      name === "billingZip"
-    ) {
-      updatedValue = value.replace(/\D/g, "").slice(0, 10);
-    }
+  if (
+    name === "primaryWorkPhone" ||
+    name === "primaryCellPhone" ||
+    name === "ceoPhone" ||
+    name === "qualityPhone" ||
+    name === "invoicingPhone"
+  ) {
+    updatedValue = value.replace(/\D/g, "").slice(0, 10);
+  }
 
-    setFormData((prev) => ({
-      ...prev,
-      [name]: updatedValue,
-    }));
+  if (name === "billingZip") {
+    updatedValue = value.replace(/\D/g, "").slice(0, 5);
+  }
 
-    setErrors((prev) => ({
-      ...prev,
-      [name]: "",
-    }));
-  };
+  setFormData((prev) => ({
+    ...prev,
+    [name]: updatedValue,
+  }));
+
+  setErrors((prev) => ({
+    ...prev,
+    [name]: "",
+  }));
+};
 
   const nextStep = () => {
     const stepErrors = validateStep(step, formData);
