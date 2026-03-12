@@ -21,13 +21,11 @@ function Step1QuoteRequest({
 
     if (checked) {
       setFieldValue("dbaName", formData.legalEntityName);
-    } else {
-      setFieldValue("dbaName", "");
     }
   };
 
   const handleVerifyEmail = () => {
-    if (!formData.primaryEmail || String(formData.primaryEmail).trim() === "") {
+    if (!formData.primaryEmail || formData.primaryEmail.trim() === "") {
       alert("Please enter an email address first.");
       return;
     }

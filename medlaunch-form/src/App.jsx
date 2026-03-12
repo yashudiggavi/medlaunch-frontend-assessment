@@ -27,7 +27,7 @@ function App() {
     }));
   };
 
-  const handleChange = (e) => {
+ const handleChange = (e) => {
   const { name, value, type, checked } = e.target;
 
   let updatedValue = type === "checkbox" ? checked : value;
@@ -44,6 +44,21 @@ function App() {
 
   if (name === "billingZip") {
     updatedValue = value.replace(/\D/g, "").slice(0, 5);
+  }
+
+  if (name === "primaryEmail") {
+    setFormData((prev) => ({
+      ...prev,
+      [name]: updatedValue,
+      primaryEmailVerified: false,
+    }));
+
+    setErrors((prev) => ({
+      ...prev,
+      [name]: "",
+    }));
+
+    return;
   }
 
   setFormData((prev) => ({

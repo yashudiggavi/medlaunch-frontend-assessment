@@ -36,6 +36,8 @@ export const validateStep = (step, formData) => {
       errors.primaryEmail = "Email is required";
     } else if (!emailRegex.test(formData.primaryEmail)) {
       errors.primaryEmail = "Enter a valid email address";
+    } else if (!formData.primaryEmailVerified) {
+      errors.primaryEmail = "Please verify your email before continuing";
     }
   }
 
@@ -44,10 +46,7 @@ export const validateStep = (step, formData) => {
       errors.facilityType = "Please select a facility type";
     }
 
-    if (
-      formData.facilityType === "Other" &&
-      !formData.facilityOther?.trim()
-    ) {
+    if (formData.facilityType === "Other" && !formData.facilityOther?.trim()) {
       errors.facilityOther = "Please specify other facility type";
     }
   }
@@ -108,7 +107,7 @@ export const validateStep = (step, formData) => {
     if (!formData.billingZip?.trim()) {
       errors.billingZip = "Billing ZIP is required";
     } else if (!zipRegex.test(formData.billingZip)) {
-      errors.billingZip = "Enter a valid ZIP code";
+      errors.billingZip = "ZIP code must be 5 digits";
     }
   }
 
