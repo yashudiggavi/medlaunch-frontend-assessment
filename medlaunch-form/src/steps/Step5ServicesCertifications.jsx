@@ -1,3 +1,4 @@
+import { useMemo, useState } from "react";
 import StepShell from "../components/StepShell";
 import SectionCard from "../components/SectionCard";
 
@@ -5,7 +6,6 @@ const serviceCategories = {
   "Emergency & Critical Care": [
     "Emergency Department",
     "Neonatal Intensive Care Services",
-    "Pediatric Intensive Care Services",
     "Pediatric Intensive Care Services",
   ],
   "Cardiac Services": [
@@ -34,6 +34,27 @@ function Step5ServicesCertifications({
   prevStep,
   errors,
 }) {
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const today = new Date().toISOString().split("T")[0];
+
+  const filteredServiceCategories = useMemo(() => {
+    const trimmed = searchTerm.trim().toLowerCase();
+
+    if (!trimmed) return serviceCategories;
+
+    const filteredEntries = Object.entries(serviceCategories)
+      .map(([category, services]) => {
+        const matchedServices = services.filter((service) =>
+          service.toLowerCase().includes(trimmed)
+        );
+        return [category, matchedServices];
+      })
+      .filter(([, services]) => services.length > 0);
+
+    return Object.fromEntries(filteredEntries);
+  }, [searchTerm]);
+
   const toggleService = (service) => {
     const exists = formData.services.includes(service);
     if (exists) {
@@ -79,6 +100,16 @@ function Step5ServicesCertifications({
 
   const addDateChip = (field, value) => {
     if (!value) return;
+
+    if (value > today) {
+      alert("Future dates are not allowed.");
+      return;
+    }
+
+    if (formData[field].includes(value)) {
+      return;
+    }
+
     setFieldValue(field, [...formData[field], value]);
   };
 
@@ -123,27 +154,35 @@ function Step5ServicesCertifications({
             className="search-input"
             placeholder="Search services..."
             type="text"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
           />
           <span className="search-icon">⌕</span>
         </div>
 
         <div className="service-grid">
-          {Object.entries(serviceCategories).map(([category, services]) => (
-            <div key={category} className="service-card">
-              <div className="service-card-title">{category}</div>
+          {Object.keys(filteredServiceCategories).length > 0 ? (
+            Object.entries(filteredServiceCategories).map(([category, services]) => (
+              <div key={category} className="service-card">
+                <div className="service-card-title">{category}</div>
 
-              {services.map((service, index) => (
-                <label key={`${service}-${index}`} className="service-check">
-                  <input
-                    type="checkbox"
-                    checked={formData.services.includes(service)}
-                    onChange={() => toggleService(service)}
-                  />
-                  <span>{service}</span>
-                </label>
-              ))}
+                {services.map((service, index) => (
+                  <label key={`${service}-${index}`} className="service-check">
+                    <input
+                      type="checkbox"
+                      checked={formData.services.includes(service)}
+                      onChange={() => toggleService(service)}
+                    />
+                    <span>{service}</span>
+                  </label>
+                ))}
+              </div>
+            ))
+          ) : (
+            <div style={{ fontSize: "12px", color: "#666" }}>
+              No matching services found
             </div>
-          ))}
+          )}
         </div>
 
         {errors?.services && <p className="error">{errors.services}</p>}
@@ -253,8 +292,13 @@ function Step5ServicesCertifications({
                 className="text-input"
                 type="date"
                 value={formData.applicationDate}
+                min={today}
+                max={today}
                 onChange={(e) => setFieldValue("applicationDate", e.target.value)}
               />
+              {errors?.applicationDate && (
+                <p className="error">{errors.applicationDate}</p>
+              )}
             </div>
           </div>
 
@@ -266,8 +310,12 @@ function Step5ServicesCertifications({
               <input
                 className="text-input"
                 type="date"
+                max={today}
                 onChange={(e) => addDateChip("thrombolyticDates", e.target.value)}
               />
+              {errors?.thrombolyticDates && (
+                <p className="error">{errors.thrombolyticDates}</p>
+              )}
             </div>
 
             <div className="tag-row">
@@ -300,8 +348,12 @@ function Step5ServicesCertifications({
               <input
                 className="text-input"
                 type="date"
+                max={today}
                 onChange={(e) => addDateChip("thrombectomyDates", e.target.value)}
               />
+              {errors?.thrombectomyDates && (
+                <p className="error">{errors.thrombectomyDates}</p>
+              )}
             </div>
 
             <div className="tag-row">
@@ -330,4 +382,5 @@ function Step5ServicesCertifications({
     </StepShell>
   );
 }
+
 export default Step5ServicesCertifications;

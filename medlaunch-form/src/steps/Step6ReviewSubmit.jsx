@@ -25,6 +25,12 @@ function joinedDates(list) {
   return list.join(", ");
 }
 
+function formatPhoneNumber(value) {
+  const digits = String(value || "").replace(/\D/g, "");
+  if (digits.length !== 10) return displayValue(value);
+  return `(${digits.slice(0, 3)}) ${digits.slice(3, 6)}-${digits.slice(6)}`;
+}
+
 function Step6ReviewSubmit({ formData, setFieldValue, prevStep }) {
   const handleSubmit = () => {
     if (!formData.submitConfirmed) {
@@ -40,6 +46,22 @@ function Step6ReviewSubmit({ formData, setFieldValue, prevStep }) {
     window.print();
   };
 
+  const uploadedFileNames =
+    formData.uploadedFiles?.length > 0
+      ? formData.uploadedFiles.map((file) =>
+          typeof file === "string" ? file : file.name
+        )
+      : [];
+
+  const primaryContactAddress = [
+    formData.billingStreet,
+    formData.billingCity,
+    formData.billingState,
+    formData.billingZip,
+  ]
+    .filter((item) => String(item || "").trim() !== "")
+    .join(", ");
+
   const handleExportCSV = () => {
     const rows = [
       ["Field", "Value"],
@@ -52,9 +74,10 @@ function Step6ReviewSubmit({ formData, setFieldValue, prevStep }) {
         )}`,
       ],
       ["Primary Title", displayValue(formData.primaryTitle)],
-      ["Primary Work Phone", displayValue(formData.primaryWorkPhone)],
-      ["Primary Cell Phone", displayValue(formData.primaryCellPhone)],
+      ["Primary Work Phone", formatPhoneNumber(formData.primaryWorkPhone)],
+      ["Primary Cell Phone", formatPhoneNumber(formData.primaryCellPhone)],
       ["Primary Email", displayValue(formData.primaryEmail)],
+      ["Primary Address", displayValue(primaryContactAddress)],
       [
         "Primary Email Verified",
         formData.primaryEmailVerified ? "Yes" : "No",
@@ -71,7 +94,7 @@ function Step6ReviewSubmit({ formData, setFieldValue, prevStep }) {
           formData.ceoLastName
         )}`,
       ],
-      ["CEO Phone", displayValue(formData.ceoPhone)],
+      ["CEO Phone", formatPhoneNumber(formData.ceoPhone)],
       ["CEO Email", displayValue(formData.ceoEmail)],
       [
         "Director of Quality Name",
@@ -79,7 +102,7 @@ function Step6ReviewSubmit({ formData, setFieldValue, prevStep }) {
           formData.qualityLastName
         )}`,
       ],
-      ["Director of Quality Phone", displayValue(formData.qualityPhone)],
+      ["Director of Quality Phone", formatPhoneNumber(formData.qualityPhone)],
       ["Director of Quality Email", displayValue(formData.qualityEmail)],
       [
         "Invoicing Contact Name",
@@ -87,7 +110,8 @@ function Step6ReviewSubmit({ formData, setFieldValue, prevStep }) {
           formData.invoicingLastName
         )}`,
       ],
-      ["Invoicing Phone", displayValue(formData.invoicingPhone)],
+      ["Invoicing Title", displayValue(formData.invoicingTitle)],
+      ["Invoicing Phone", formatPhoneNumber(formData.invoicingPhone)],
       ["Invoicing Email", displayValue(formData.invoicingEmail)],
       ["Billing Street", displayValue(formData.billingStreet)],
       ["Billing City", displayValue(formData.billingCity)],
@@ -95,7 +119,9 @@ function Step6ReviewSubmit({ formData, setFieldValue, prevStep }) {
       ["Billing Zip", displayValue(formData.billingZip)],
       [
         "Site Configuration",
-        formData.siteMode === "multiple" ? "Multiple Locations" : "Single Location",
+        formData.siteMode === "multiple"
+          ? "Multiple Locations"
+          : "Single Location",
       ],
       [
         "Input Method",
@@ -107,7 +133,7 @@ function Step6ReviewSubmit({ formData, setFieldValue, prevStep }) {
       ],
       [
         "Uploaded Files",
-        formData.uploadedFiles?.length ? formData.uploadedFiles.join(", ") : "—",
+        uploadedFileNames.length ? uploadedFileNames.join(", ") : "—",
       ],
       [
         "Services Provided",
@@ -115,7 +141,8 @@ function Step6ReviewSubmit({ formData, setFieldValue, prevStep }) {
       ],
       [
         "Other Services",
-        formData.otherServices?.filter((item) => String(item).trim() !== "").length
+        formData.otherServices?.filter((item) => String(item).trim() !== "")
+          .length
           ? formData.otherServices
               .filter((item) => String(item).trim() !== "")
               .join(", ")
@@ -142,9 +169,7 @@ function Step6ReviewSubmit({ formData, setFieldValue, prevStep }) {
 
     const csvContent = rows
       .map((row) =>
-        row
-          .map((item) => `"${String(item).replace(/"/g, '""')}"`)
-          .join(",")
+        row.map((item) => `"${String(item).replace(/"/g, '""')}"`).join(",")
       )
       .join("\n");
 
@@ -213,8 +238,8 @@ function Step6ReviewSubmit({ formData, setFieldValue, prevStep }) {
                     <br />
                     {displayValue(formData.primaryTitle)}
                     <br />
-                    Work: {displayValue(formData.primaryWorkPhone)} | Cell:{" "}
-                    {displayValue(formData.primaryCellPhone)}
+                    Work: {formatPhoneNumber(formData.primaryWorkPhone)} | Cell:{" "}
+                    {formatPhoneNumber(formData.primaryCellPhone)}
                     <br />
                     Email: {displayValue(formData.primaryEmail)}{" "}
                     {formData.primaryEmailVerified && (
@@ -229,6 +254,8 @@ function Step6ReviewSubmit({ formData, setFieldValue, prevStep }) {
                         Verified
                       </span>
                     )}
+                    <br />
+                    Address: {displayValue(primaryContactAddress)}
                   </div>
                 </td>
               </tr>
@@ -263,7 +290,7 @@ function Step6ReviewSubmit({ formData, setFieldValue, prevStep }) {
                       {displayValue(formData.ceoLastName)}
                     </strong>
                     <br />
-                    Phone: {displayValue(formData.ceoPhone)}
+                    Phone: {formatPhoneNumber(formData.ceoPhone)}
                     <br />
                     Email: {displayValue(formData.ceoEmail)}
                   </div>
@@ -279,7 +306,7 @@ function Step6ReviewSubmit({ formData, setFieldValue, prevStep }) {
                       {displayValue(formData.qualityLastName)}
                     </strong>
                     <br />
-                    Phone: {displayValue(formData.qualityPhone)}
+                    Phone: {formatPhoneNumber(formData.qualityPhone)}
                     <br />
                     Email: {displayValue(formData.qualityEmail)}
                   </div>
@@ -295,7 +322,9 @@ function Step6ReviewSubmit({ formData, setFieldValue, prevStep }) {
                       {displayValue(formData.invoicingLastName)}
                     </strong>
                     <br />
-                    Phone: {displayValue(formData.invoicingPhone)}
+                    Title: {displayValue(formData.invoicingTitle)}
+                    <br />
+                    Phone: {formatPhoneNumber(formData.invoicingPhone)}
                     <br />
                     Email: {displayValue(formData.invoicingEmail)}
                     <br />
@@ -336,8 +365,8 @@ function Step6ReviewSubmit({ formData, setFieldValue, prevStep }) {
                 <tr>
                   <td>Uploaded Files</td>
                   <td>
-                    {formData.uploadedFiles?.length
-                      ? formData.uploadedFiles.join(", ")
+                    {uploadedFileNames.length
+                      ? uploadedFileNames.join(", ")
                       : "—"}
                   </td>
                 </tr>
@@ -472,4 +501,5 @@ function Step6ReviewSubmit({ formData, setFieldValue, prevStep }) {
     </StepShell>
   );
 }
+
 export default Step6ReviewSubmit;

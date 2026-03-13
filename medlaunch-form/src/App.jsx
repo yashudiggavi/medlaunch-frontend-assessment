@@ -10,6 +10,18 @@ import Step4SiteInformation from "./steps/Step4SiteInformation";
 import Step5ServicesCertifications from "./steps/Step5ServicesCertifications";
 import Step6ReviewSubmit from "./steps/Step6ReviewSubmit";
 
+const formatPhoneInput = (value) => {
+  const digits = value.replace(/\D/g, "").slice(0, 10);
+
+  if (digits.length === 0) return "";
+  if (digits.length <= 3) return `(${digits}`;
+  if (digits.length <= 6) {
+    return `(${digits.slice(0, 3)}) ${digits.slice(3)}`;
+  }
+
+  return `(${digits.slice(0, 3)}) ${digits.slice(3, 6)}-${digits.slice(6)}`;
+};
+
 function App() {
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState(initialFormData);
@@ -27,50 +39,79 @@ function App() {
     }));
   };
 
- const handleChange = (e) => {
-  const { name, value, type, checked } = e.target;
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
 
-  let updatedValue = type === "checkbox" ? checked : value;
+    let updatedValue = type === "checkbox" ? checked : value;
 
-  if (
-    name === "primaryWorkPhone" ||
-    name === "primaryCellPhone" ||
-    name === "ceoPhone" ||
-    name === "qualityPhone" ||
-    name === "invoicingPhone"
-  ) {
-    updatedValue = value.replace(/\D/g, "").slice(0, 10);
-  }
+    const phoneFields = [
+      "primaryWorkPhone",
+      "primaryCellPhone",
+      "ceoPhone",
+      "qualityPhone",
+      "invoicingPhone",
+    ];
 
-  if (name === "billingZip") {
-    updatedValue = value.replace(/\D/g, "").slice(0, 5);
-  }
+    const alphaOnlyFields = [
+      "primaryFirstName",
+      "primaryLastName",
+      "ceoFirstName",
+      "ceoLastName",
+      "qualityFirstName",
+      "qualityLastName",
+      "invoicingFirstName",
+      "invoicingLastName",
+      "billingCity",
+    ];
 
-  if (name === "primaryEmail") {
+    const emailFields = [
+      "primaryEmail",
+      "ceoEmail",
+      "qualityEmail",
+      "invoicingEmail",
+    ];
+
+    if (phoneFields.includes(name)) {
+      updatedValue = formatPhoneInput(value);
+    }
+
+    if (name === "billingZip") {
+      updatedValue = value.replace(/\D/g, "").slice(0, 5);
+    }
+
+    if (alphaOnlyFields.includes(name)) {
+      updatedValue = value.replace(/[^A-Za-z\s]/g, "");
+    }
+
+    if (emailFields.includes(name)) {
+      updatedValue = value.trim().toLowerCase();
+    }
+
+    if (name === "primaryEmail") {
+      setFormData((prev) => ({
+        ...prev,
+        [name]: updatedValue,
+        primaryEmailVerified: false,
+      }));
+
+      setErrors((prev) => ({
+        ...prev,
+        [name]: "",
+      }));
+
+      return;
+    }
+
     setFormData((prev) => ({
       ...prev,
       [name]: updatedValue,
-      primaryEmailVerified: false,
     }));
 
     setErrors((prev) => ({
       ...prev,
       [name]: "",
     }));
-
-    return;
-  }
-
-  setFormData((prev) => ({
-    ...prev,
-    [name]: updatedValue,
-  }));
-
-  setErrors((prev) => ({
-    ...prev,
-    [name]: "",
-  }));
-};
+  };
 
   const nextStep = () => {
     const stepErrors = validateStep(step, formData);
@@ -152,4 +193,5 @@ function App() {
     </>
   );
 }
+
 export default App;

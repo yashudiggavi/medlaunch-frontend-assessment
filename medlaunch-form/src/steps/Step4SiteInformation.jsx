@@ -1,6 +1,14 @@
 import StepShell from "../components/StepShell";
 import SectionCard from "../components/SectionCard";
 
+function formatFileSize(bytes) {
+  if (!bytes || Number.isNaN(bytes)) return "0 KB";
+  const mb = bytes / (1024 * 1024);
+  if (mb >= 1) return `${mb.toFixed(1)} MB`;
+  const kb = bytes / 1024;
+  return `${kb.toFixed(1)} KB`;
+}
+
 function Step4SiteInformation({
   formData,
   setFieldValue,
@@ -11,15 +19,107 @@ function Step4SiteInformation({
   const isSingle = formData.siteMode === "single";
   const isMultiple = formData.siteMode === "multiple";
 
+  const allowedExtensions = [".csv", ".xls", ".xlsx"];
+
+  const isValidFile = (file) => {
+    const lowerName = file.name.toLowerCase();
+    return allowedExtensions.some((ext) => lowerName.endsWith(ext));
+  };
+
+  const processFiles = (files) => {
+    const fileArray = Array.from(files || []);
+    if (fileArray.length === 0) return;
+
+    const invalidFiles = fileArray.filter((file) => !isValidFile(file));
+    if (invalidFiles.length > 0) {
+      alert("Only CSV and Excel files (.csv, .xls, .xlsx) are allowed.");
+      return;
+    }
+
+    const uploadedFileObjects = fileArray.map((file) => ({
+      name: file.name,
+      size: formatFileSize(file.size),
+      type: file.type,
+      file,
+      url: URL.createObjectURL(file),
+    }));
+
+    setFieldValue("uploadedFiles", [...formData.uploadedFiles, ...uploadedFileObjects]);
+  };
+
   const handleFileChange = (e) => {
-    const files = Array.from(e.target.files || []);
-    if (files.length === 0) return;
-
-    const fileNames = files.map((file) => file.name);
-
-    setFieldValue("uploadedFiles", [...formData.uploadedFiles, ...fileNames]);
-
+    processFiles(e.target.files);
     e.target.value = "";
+  };
+
+  const handleDragOver = (e) => {
+    e.preventDefault();
+  };
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    processFiles(e.dataTransfer.files);
+  };
+
+  const handleRemoveFile = (indexToRemove) => {
+    const fileToRemove = formData.uploadedFiles[indexToRemove];
+    if (fileToRemove?.url) {
+      URL.revokeObjectURL(fileToRemove.url);
+    }
+
+    setFieldValue(
+      "uploadedFiles",
+      formData.uploadedFiles.filter((_, index) => index !== indexToRemove)
+    );
+  };
+
+  const handleDownloadTemplate = () => {
+    const csvContent =
+      "Site Name,Street Address,City,State,ZIP Code\n" +
+      "Main Hospital,123 Main St,Riverside,CA,92501\n";
+
+    const blob = new Blob([csvContent], {
+      type: "text/csv;charset=utf-8;",
+    });
+
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.setAttribute("download", "site-information-template.csv");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
+
+  const handlePreviewFile = (fileItem) => {
+    if (!fileItem?.url) return;
+
+    const lowerName = fileItem.name.toLowerCase();
+
+    if (lowerName.endsWith(".csv")) {
+      window.open(fileItem.url, "_blank");
+      return;
+    }
+
+    alert("Preview works directly for CSV files. Excel files will be downloaded instead.");
+    const link = document.createElement("a");
+    link.href = fileItem.url;
+    link.download = fileItem.name;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  const handleDownloadUploadedFile = (fileItem) => {
+    if (!fileItem?.url) return;
+
+    const link = document.createElement("a");
+    link.href = fileItem.url;
+    link.download = fileItem.name;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
   return (
@@ -50,6 +150,10 @@ function Step4SiteInformation({
           <div
             className={`option-box ${isSingle ? "selected" : ""}`}
             onClick={() => {
+              formData.uploadedFiles.forEach((fileItem) => {
+                if (fileItem?.url) URL.revokeObjectURL(fileItem.url);
+              });
+
               setFieldValue("siteMode", "single");
               setFieldValue("siteInputMethod", "");
               setFieldValue("uploadedFiles", []);
@@ -97,12 +201,16 @@ function Step4SiteInformation({
             )}
 
             <div className="upload-panel">
-              <div className="upload-dropzone">
+              <div
+                className="upload-dropzone"
+                onDragOver={handleDragOver}
+                onDrop={handleDrop}
+              >
                 <div>
                   <div style={{ fontSize: "22px", marginBottom: "10px" }}>⇪</div>
                   <div
                     style={{
-                      fontSize: "10px",
+                      fontSize: "14px",
                       fontWeight: 700,
                       marginBottom: "8px",
                     }}
@@ -111,12 +219,12 @@ function Step4SiteInformation({
                   </div>
                   <div
                     style={{
-                      fontSize: "8px",
+                      fontSize: "12px",
                       color: "#888",
                       marginBottom: "10px",
                     }}
                   >
-                    Drag and drop your CSV or Excel file here, or click to select
+                    Drag and drop your CSV or Excel file here
                   </div>
 
                   <input
@@ -140,28 +248,84 @@ function Step4SiteInformation({
 
                   <div
                     style={{
-                      fontSize: "9px",
+                      fontSize: "14px",
                       color: "#2b5c94",
                       marginTop: "8px",
                       cursor: "pointer",
                     }}
+                    onClick={handleDownloadTemplate}
                   >
                     Download CSV Template
                   </div>
                 </div>
               </div>
 
-              <div style={{ fontSize: "9px", color: "#666", marginBottom: "6px" }}>
+              <div style={{ fontSize: "14px", color: "#666", marginBottom: "8px" }}>
                 Uploaded
               </div>
 
               {formData.uploadedFiles.length === 0 ? (
-                <div style={{ fontSize: "9px", color: "#888" }}>No files selected</div>
+                <div style={{ fontSize: "12px", color: "#888" }}>
+                  No files selected
+                </div>
               ) : (
                 formData.uploadedFiles.map((file, index) => (
-                  <div key={`${file}-${index}`} className="upload-file-row">
-                    <span>{file}</span>
-                    <span>Selected</span>
+                  <div key={`${file.name}-${index}`} className="upload-file-row">
+                    <div>
+                      <div style={{ fontWeight: 700, fontSize: "12px" }}>
+                        {file.name}
+                      </div>
+                      <div
+                        style={{
+                          display: "flex",
+                          gap: "12px",
+                          marginTop: "4px",
+                          fontSize: "12px",
+                        }}
+                      >
+                        <span
+                          style={{ color: "#2b5c94", cursor: "pointer" }}
+                          onClick={() => handlePreviewFile(file)}
+                        >
+                          Preview
+                        </span>
+                        <span
+                          style={{ color: "#2b5c94", cursor: "pointer" }}
+                          onClick={() => handleDownloadUploadedFile(file)}
+                        >
+                          Download
+                        </span>
+                      </div>
+                    </div>
+
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "12px",
+                      }}
+                    >
+                      <span style={{ fontSize: "12px", color: "#666" }}>
+                        {file.size}
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => handleRemoveFile(index)}
+                        style={{
+                          border: "none",
+                          background: "#0a66c2",
+                          color: "#fff",
+                          width: "28px",
+                          height: "28px",
+                          borderRadius: "50%",
+                          cursor: "pointer",
+                          fontSize: "16px",
+                          lineHeight: 1,
+                        }}
+                      >
+                        ×
+                      </button>
+                    </div>
                   </div>
                 ))
               )}
@@ -172,4 +336,5 @@ function Step4SiteInformation({
     </StepShell>
   );
 }
+
 export default Step4SiteInformation;

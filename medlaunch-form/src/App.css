@@ -188,6 +188,14 @@ textarea {
   color: #9a9a9a;
 }
 
+.text-input:disabled,
+.select-input:disabled {
+  background: #f4f6f8;
+  color: #7d7d7d;
+  cursor: not-allowed;
+  border-color: #d8dde3;
+}
+
 .two-col {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -290,23 +298,30 @@ textarea {
 }
 
 .support-chat-btn {
-  height: 36px;
-  padding: 0 16px;
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  height: 54px;
+  padding: 0 24px;
   border: none;
   border-radius: 999px;
-  background: var(--blue);
+  background: #005baa;
   color: white;
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: 7px;
-  font-size: 10px;
-  font-weight: 600;
+  gap: 9px;
+  font-size: 12px;
+  font-weight: 700;
   cursor: pointer;
+  z-index: 1000;
+  box-shadow: 0 8px 20px rgba(0, 91, 170, 0.18);
 }
 
 .support-chat-icon {
-  font-size: 11px;
+  font-size: 16px;
   line-height: 1;
+  display: inline-flex;
+  align-items: center;
 }
 
 .option-grid {
@@ -451,37 +466,37 @@ textarea {
 }
 
 .upload-panel {
-  margin-top: 12px;
+  margin-top: 16px;
   border: 1px solid #c8d9ea;
   background: #edf5fb;
-  border-radius: 4px;
-  padding: 12px;
+  border-radius: 8px;
+  padding: 16px;
 }
 
 .upload-dropzone {
-  border: 1px dashed #9fb8d1;
-  border-radius: 4px;
+  border: 1.5px dashed #9fb8d1;
+  border-radius: 10px;
   background: #fff;
-  min-height: 160px;
+  min-height: 220px;
   display: flex;
   align-items: center;
   justify-content: center;
   text-align: center;
-  padding: 16px;
-  margin-bottom: 10px;
+  padding: 24px;
+  margin-bottom: 12px;
 }
 
 .upload-file-row {
-  height: 32px;
+  min-height: 54px;
   border: 1px solid #a7c3df;
-  border-radius: 4px;
+  border-radius: 8px;
   background: #fff;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 8px;
-  font-size: 9px;
-  margin-top: 6px;
+  padding: 10px 12px;
+  font-size: 10px;
+  margin-top: 8px;
 }
 
 .review-section {
@@ -523,11 +538,12 @@ textarea {
 .review-table td:first-child {
   width: 150px;
   color: #666;
+  font-weight: 600;
 }
 
 .review-highlight-box {
   background: #f6f6f6;
-  border-radius: 4px;
+  border-radius: 8px;
   padding: 12px;
   font-size: 10px;
   line-height: 1.7;
@@ -586,6 +602,14 @@ textarea {
   margin-bottom: 4px;
 }
 
+.error {
+  color: #d93025;
+  font-size: 13px;
+  margin-top: 4px;
+  line-height: 1.4;
+  font-weight: 500;
+}
+
 @media (max-width: 768px) {
   .page-shell {
     padding: 24px 14px 18px;
@@ -620,11 +644,9 @@ textarea {
     align-items: flex-start;
     gap: 6px;
   }
-}
-.error {
-  color: #d93025;
-  font-size: 13px;
-  margin-top: 4px;
-  line-height: 1.4;
-  font-weight: 500;
+
+  .support-chat-btn {
+    right: 14px;
+    bottom: 14px;
+  }
 }

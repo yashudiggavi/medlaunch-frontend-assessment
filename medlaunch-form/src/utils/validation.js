@@ -1,25 +1,30 @@
-const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const phoneRegex = /^[0-9]{10}$/;
-const zipRegex = /^[0-9]{5}$/;
-
 export const validateStep = (step, formData) => {
   const errors = {};
 
+  const nameRegex = /^[A-Za-z\s]+$/;
+  const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
+  const phoneRegex = /^\(\d{3}\)\s\d{3}-\d{4}$/;
+  const zipRegex = /^\d{5}$/;
+
   if (step === 1) {
     if (!formData.legalEntityName?.trim()) {
-      errors.legalEntityName = "Legal Entity Name is required";
+      errors.legalEntityName = "Legal entity name is required";
     }
 
     if (!formData.dbaName?.trim()) {
-      errors.dbaName = "DBA Name is required";
+      errors.dbaName = "Doing business as name is required";
     }
 
     if (!formData.primaryFirstName?.trim()) {
       errors.primaryFirstName = "First name is required";
+    } else if (!nameRegex.test(formData.primaryFirstName.trim())) {
+      errors.primaryFirstName = "First name should contain only alphabets";
     }
 
     if (!formData.primaryLastName?.trim()) {
       errors.primaryLastName = "Last name is required";
+    } else if (!nameRegex.test(formData.primaryLastName.trim())) {
+      errors.primaryLastName = "Last name should contain only alphabets";
     }
 
     if (!formData.primaryTitle?.trim()) {
@@ -29,67 +34,110 @@ export const validateStep = (step, formData) => {
     if (!formData.primaryWorkPhone?.trim()) {
       errors.primaryWorkPhone = "Work phone is required";
     } else if (!phoneRegex.test(formData.primaryWorkPhone)) {
-      errors.primaryWorkPhone = "Phone number must be 10 digits only";
+      errors.primaryWorkPhone = "Work phone must be in format (123) 456-7890";
+    }
+
+    if (
+      formData.primaryCellPhone &&
+      !phoneRegex.test(formData.primaryCellPhone)
+    ) {
+      errors.primaryCellPhone = "Cell phone must be in format (123) 456-7890";
     }
 
     if (!formData.primaryEmail?.trim()) {
       errors.primaryEmail = "Email is required";
-    } else if (!emailRegex.test(formData.primaryEmail)) {
+    } else if (!emailRegex.test(formData.primaryEmail.trim())) {
       errors.primaryEmail = "Enter a valid email address";
-    } else if (!formData.primaryEmailVerified) {
-      errors.primaryEmail = "Please verify your email before continuing";
     }
   }
 
   if (step === 2) {
-    if (!formData.facilityType) {
-      errors.facilityType = "Please select a facility type";
+    if (!formData.facilityType?.trim()) {
+      errors.facilityType = "Facility type is required";
     }
 
     if (formData.facilityType === "Other" && !formData.facilityOther?.trim()) {
-      errors.facilityOther = "Please specify other facility type";
+      errors.facilityOther = "Please specify facility type";
     }
   }
 
   if (step === 3) {
     if (!formData.ceoFirstName?.trim()) {
       errors.ceoFirstName = "CEO first name is required";
+    } else if (!nameRegex.test(formData.ceoFirstName.trim())) {
+      errors.ceoFirstName = "CEO first name should contain only alphabets";
     }
 
     if (!formData.ceoLastName?.trim()) {
       errors.ceoLastName = "CEO last name is required";
+    } else if (!nameRegex.test(formData.ceoLastName.trim())) {
+      errors.ceoLastName = "CEO last name should contain only alphabets";
     }
 
     if (!formData.ceoPhone?.trim()) {
       errors.ceoPhone = "CEO phone is required";
     } else if (!phoneRegex.test(formData.ceoPhone)) {
-      errors.ceoPhone = "Phone number must be 10 digits only";
+      errors.ceoPhone = "CEO phone must be in format (123) 456-7890";
     }
 
     if (!formData.ceoEmail?.trim()) {
       errors.ceoEmail = "CEO email is required";
-    } else if (!emailRegex.test(formData.ceoEmail)) {
-      errors.ceoEmail = "Enter a valid email address";
+    } else if (!emailRegex.test(formData.ceoEmail.trim())) {
+      errors.ceoEmail = "Enter a valid CEO email";
+    }
+
+    if (
+      formData.qualityFirstName &&
+      !nameRegex.test(formData.qualityFirstName.trim())
+    ) {
+      errors.qualityFirstName =
+        "Quality first name should contain only alphabets";
+    }
+
+    if (
+      formData.qualityLastName &&
+      !nameRegex.test(formData.qualityLastName.trim())
+    ) {
+      errors.qualityLastName =
+        "Quality last name should contain only alphabets";
+    }
+
+    if (formData.qualityPhone && !phoneRegex.test(formData.qualityPhone)) {
+      errors.qualityPhone = "Quality phone must be in format (123) 456-7890";
+    }
+
+    if (
+      formData.qualityEmail &&
+      !emailRegex.test(formData.qualityEmail.trim())
+    ) {
+      errors.qualityEmail = "Enter a valid quality email";
     }
 
     if (!formData.invoicingFirstName?.trim()) {
       errors.invoicingFirstName = "Invoicing first name is required";
+    } else if (!nameRegex.test(formData.invoicingFirstName.trim())) {
+      errors.invoicingFirstName =
+        "Invoicing first name should contain only alphabets";
     }
 
     if (!formData.invoicingLastName?.trim()) {
       errors.invoicingLastName = "Invoicing last name is required";
+    } else if (!nameRegex.test(formData.invoicingLastName.trim())) {
+      errors.invoicingLastName =
+        "Invoicing last name should contain only alphabets";
     }
 
     if (!formData.invoicingPhone?.trim()) {
       errors.invoicingPhone = "Invoicing phone is required";
     } else if (!phoneRegex.test(formData.invoicingPhone)) {
-      errors.invoicingPhone = "Phone number must be 10 digits only";
+      errors.invoicingPhone =
+        "Invoicing phone must be in format (123) 456-7890";
     }
 
     if (!formData.invoicingEmail?.trim()) {
       errors.invoicingEmail = "Invoicing email is required";
-    } else if (!emailRegex.test(formData.invoicingEmail)) {
-      errors.invoicingEmail = "Enter a valid email address";
+    } else if (!emailRegex.test(formData.invoicingEmail.trim())) {
+      errors.invoicingEmail = "Enter a valid invoicing email";
     }
 
     if (!formData.billingStreet?.trim()) {
@@ -98,6 +146,8 @@ export const validateStep = (step, formData) => {
 
     if (!formData.billingCity?.trim()) {
       errors.billingCity = "Billing city is required";
+    } else if (!nameRegex.test(formData.billingCity.trim())) {
+      errors.billingCity = "Billing city should contain only alphabets";
     }
 
     if (!formData.billingState?.trim()) {
@@ -107,32 +157,60 @@ export const validateStep = (step, formData) => {
     if (!formData.billingZip?.trim()) {
       errors.billingZip = "Billing ZIP is required";
     } else if (!zipRegex.test(formData.billingZip)) {
-      errors.billingZip = "ZIP code must be 5 digits";
+      errors.billingZip = "Billing ZIP must be exactly 5 digits";
     }
   }
 
   if (step === 4) {
-    if (!formData.siteMode) {
-      errors.siteMode = "Please select a site option";
+    if (!formData.siteMode?.trim()) {
+      errors.siteMode = "Please select site configuration";
     }
 
-    if (formData.siteMode === "multiple" && !formData.siteInputMethod) {
-      errors.siteInputMethod = "Please select a site input method";
+    if (formData.siteMode === "multiple") {
+      if (!formData.siteInputMethod?.trim()) {
+        errors.siteInputMethod = "Please choose how to add site information";
+      }
+
+      if (
+        formData.siteInputMethod === "upload" &&
+        (!formData.uploadedFiles || formData.uploadedFiles.length === 0)
+      ) {
+        errors.siteInputMethod = "Please upload at least one file";
+      }
     }
   }
 
   if (step === 5) {
-    const hasSelectedServices =
-      Array.isArray(formData.services) && formData.services.length > 0;
+    const validOtherServices =
+      formData.otherServices?.filter((item) => String(item).trim() !== "") || [];
 
-    const hasOtherServices =
-      Array.isArray(formData.otherServices) &&
-      formData.otherServices.some((item) => String(item).trim() !== "");
+    if (
+      (!formData.services || formData.services.length === 0) &&
+      validOtherServices.length === 0
+    ) {
+      errors.services = "Please select at least one service";
+    }
 
-    if (!hasSelectedServices && !hasOtherServices) {
-      errors.services =
-        "Please select at least one service or add another service";
+    const today = new Date().toISOString().split("T")[0];
+
+    if (formData.applicationDate && formData.applicationDate !== today) {
+      errors.applicationDate = "Date of application must be today";
+    }
+
+    if (
+      formData.thrombolyticDates &&
+      formData.thrombolyticDates.some((date) => date > today)
+    ) {
+      errors.thrombolyticDates = "Future dates are not allowed";
+    }
+
+    if (
+      formData.thrombectomyDates &&
+      formData.thrombectomyDates.some((date) => date > today)
+    ) {
+      errors.thrombectomyDates = "Future dates are not allowed";
     }
   }
+
   return errors;
 };

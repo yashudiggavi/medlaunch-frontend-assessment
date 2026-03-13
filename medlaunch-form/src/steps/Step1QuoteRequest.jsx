@@ -25,8 +25,15 @@ function Step1QuoteRequest({
   };
 
   const handleVerifyEmail = () => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
     if (!formData.primaryEmail || formData.primaryEmail.trim() === "") {
       alert("Please enter an email address first.");
+      return;
+    }
+
+    if (!emailRegex.test(formData.primaryEmail.trim())) {
+      alert("Please enter a valid email address first.");
       return;
     }
 
@@ -166,7 +173,7 @@ function Step1QuoteRequest({
                 name="primaryWorkPhone"
                 value={formData.primaryWorkPhone}
                 onChange={handleChange}
-                maxLength={10}
+                maxLength={14}
               />
               {errors.primaryWorkPhone && (
                 <p className="error">{errors.primaryWorkPhone}</p>
@@ -181,8 +188,11 @@ function Step1QuoteRequest({
                 name="primaryCellPhone"
                 value={formData.primaryCellPhone}
                 onChange={handleChange}
-                maxLength={10}
+                maxLength={14}
               />
+              {errors.primaryCellPhone && (
+                <p className="error">{errors.primaryCellPhone}</p>
+              )}
             </div>
           </div>
 
@@ -230,4 +240,5 @@ function Step1QuoteRequest({
     </StepShell>
   );
 }
+
 export default Step1QuoteRequest;

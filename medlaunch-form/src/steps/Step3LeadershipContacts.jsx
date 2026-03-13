@@ -6,6 +6,7 @@ function ContactBlock({
   sameField,
   firstNameField,
   lastNameField,
+  titleField,
   phoneField,
   emailField,
   formData,
@@ -13,7 +14,10 @@ function ContactBlock({
   setFieldValue,
   errors,
   required = false,
+  showTitle = false,
 }) {
+  const isSameAsPrimary = formData[sameField];
+
   const copyPrimary = (checked) => {
     setFieldValue(sameField, checked);
 
@@ -22,6 +26,10 @@ function ContactBlock({
       setFieldValue(lastNameField, formData.primaryLastName);
       setFieldValue(phoneField, formData.primaryWorkPhone);
       setFieldValue(emailField, formData.primaryEmail);
+
+      if (showTitle && titleField) {
+        setFieldValue(titleField, formData.primaryTitle || "");
+      }
     }
   };
 
@@ -49,6 +57,7 @@ function ContactBlock({
             name={firstNameField}
             value={formData[firstNameField]}
             onChange={handleChange}
+            disabled={isSameAsPrimary}
           />
           {errors?.[firstNameField] && (
             <p className="error">{errors[firstNameField]}</p>
@@ -65,12 +74,28 @@ function ContactBlock({
             name={lastNameField}
             value={formData[lastNameField]}
             onChange={handleChange}
+            disabled={isSameAsPrimary}
           />
           {errors?.[lastNameField] && (
             <p className="error">{errors[lastNameField]}</p>
           )}
         </div>
       </div>
+
+      {showTitle && titleField && (
+        <div className="form-group">
+          <label className="form-label">Title</label>
+          <input
+            className="text-input"
+            type="text"
+            name={titleField}
+            value={formData[titleField] || ""}
+            onChange={handleChange}
+            disabled={isSameAsPrimary}
+            placeholder="Director of Finance"
+          />
+        </div>
+      )}
 
       <div className="form-group">
         <label className="form-label">
@@ -82,7 +107,8 @@ function ContactBlock({
           name={phoneField}
           value={formData[phoneField]}
           onChange={handleChange}
-          maxLength={10}
+          maxLength={14}
+          disabled={isSameAsPrimary}
         />
         {errors?.[phoneField] && (
           <p className="error">{errors[phoneField]}</p>
@@ -99,6 +125,7 @@ function ContactBlock({
           name={emailField}
           value={formData[emailField]}
           onChange={handleChange}
+          disabled={isSameAsPrimary}
         />
         {errors?.[emailField] && (
           <p className="error">{errors[emailField]}</p>
@@ -145,6 +172,7 @@ function Step3LeadershipContacts({
           sameField="ceoSameAsPrimary"
           firstNameField="ceoFirstName"
           lastNameField="ceoLastName"
+          titleField="ceoTitle"
           phoneField="ceoPhone"
           emailField="ceoEmail"
           formData={formData}
@@ -152,6 +180,7 @@ function Step3LeadershipContacts({
           setFieldValue={setFieldValue}
           errors={errors}
           required
+          showTitle={false}
         />
 
         <ContactBlock
@@ -159,12 +188,14 @@ function Step3LeadershipContacts({
           sameField="qualitySameAsPrimary"
           firstNameField="qualityFirstName"
           lastNameField="qualityLastName"
+          titleField="qualityTitle"
           phoneField="qualityPhone"
           emailField="qualityEmail"
           formData={formData}
           handleChange={handleChange}
           setFieldValue={setFieldValue}
           errors={errors}
+          showTitle={false}
         />
 
         <ContactBlock
@@ -172,6 +203,7 @@ function Step3LeadershipContacts({
           sameField="invoicingSameAsPrimary"
           firstNameField="invoicingFirstName"
           lastNameField="invoicingLastName"
+          titleField="invoicingTitle"
           phoneField="invoicingPhone"
           emailField="invoicingEmail"
           formData={formData}
@@ -179,6 +211,7 @@ function Step3LeadershipContacts({
           setFieldValue={setFieldValue}
           errors={errors}
           required
+          showTitle={true}
         />
 
         <div className="contact-subcard">
@@ -259,4 +292,5 @@ function Step3LeadershipContacts({
     </StepShell>
   );
 }
+
 export default Step3LeadershipContacts;
